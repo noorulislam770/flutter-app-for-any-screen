@@ -1,92 +1,93 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MaterialApp(
-      home: MyHomePage(),
-    ));
+void main() => runApp(const MyApp());
 
-class MyHomePage extends StatefulWidget {
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "App",
+      home: MyHomePage(),
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  // initial variable
-  List<String> _todos = ['task1', 'task2', 'task3'];
-
-  // Dialog box pop up
-
-  void _addTodo() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          String newTodo = '';
-
-          return AlertDialog(
-            title: Text('Enter your task below'),
-            content: TextField(
-              onChanged: (value) {
-                newTodo = value;
-              },
-            ),
-            actions: <Widget>[
-              TextButton(
-                  child: Text('Cancel'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _todos.add(newTodo);
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('Add'))
-            ],
-          );
-        });
-  }
-
-  // add input to the todo list
+class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Todos Version 1'),
+        title: const Text('App with drawer'),
       ),
-      body: ListView.builder(
-          itemCount: _todos.length,
-          itemBuilder: (context, index) {
-            final todo = _todos[index];
-            return ListTile(
-              title: Text(
-                todo,
-                style: TextStyle(
-                    decoration: todo.startsWith('-')
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none),
+      body: Center(child: Text("Home Screen")),
+      drawer: Drawer(
+        shadowColor: Colors.amber,
+        child: ListView(
+          children: [
+            const SizedBox(
+              height: 60.0,
+              child: DrawerHeader(
+                decoration: BoxDecoration(color: Colors.blue),
+                child: Text('Screens'),
               ),
+            ),
+            ListTile(
+              title: const Text('first screen'),
               onTap: () {
-                setState(() {
-                  if (todo.startsWith('-')) {
-                    _todos[index] = todo.substring(2);
-                  } else {
-                    _todos[index] = '- $todo';
-                  }
-                });
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemOnePage(),
+                    ));
               },
-              onLongPress: () {
-                setState(() {
-                  _todos.removeAt(index);
-                });
+            ),
+            ListTile(
+              title: const Text('second screen'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ItemTwoPage(),
+                    ));
               },
-            );
-          }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addTodo,
-        child: Icon(Icons.add),
+            ),
+          ],
+        ),
       ),
     );
   }
-  // create list view builder to show the list tiles
+}
+
+class ItemOnePage extends StatelessWidget {
+  const ItemOnePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Second Screen"),
+      ),
+      body: const Center(
+        child: Text('Second screen'),
+      ),
+    );
+  }
+}
+
+class ItemTwoPage extends StatelessWidget {
+  const ItemTwoPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Second Screen"),
+      ),
+      body: const Center(
+        child: Text('Second screen'),
+      ),
+    );
+  }
 }
