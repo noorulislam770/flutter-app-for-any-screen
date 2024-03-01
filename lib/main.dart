@@ -1,45 +1,35 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 void main() => runApp(MaterialApp(
-      home: MyHomePage(),
+      home: Scaffold(
+        body: Center(
+          child: Counter(),
+        ),
+      ),
     ));
 
-class MyHomePage extends StatefulWidget {
+class Counter extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<Counter> createState() => _CounterState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  bool isButtonPressed = false;
+class _CounterState extends State<Counter> {
+  int _counter = 0;
+
+  void _increment() {
+    setState(() {
+      _counter++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          if (isButtonPressed) {
-            setState(() {
-              isButtonPressed = false;
-            });
-          } else {
-            setState(() {
-              isButtonPressed = true;
-            });
-          }
-        },
-        child: Container(
-          color: getColor(),
-        ),
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TextButton(onPressed: _increment, child: const Text("Tap Me")),
+        Text('you tapped $_counter time(s)')
+      ],
     );
-  }
-
-  Color getColor() {
-    if (isButtonPressed) {
-      return Colors.red;
-    } else {
-      return Colors.blue;
-    }
   }
 }
