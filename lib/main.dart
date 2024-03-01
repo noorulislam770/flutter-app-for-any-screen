@@ -1,37 +1,77 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MaterialApp(
+      home: MyHomePage(),
+    ));
 
-class MyApp extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  // initial variable
+  List<String> _todos = ['task1', 'task2', 'task3'];
+
+  // Dialog box pop up
+
+  void _addTodo() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          String newTodo = '';
+
+          return AlertDialog(
+            title: Text('Enter your task below'),
+            content: TextField(
+              onChanged: (value) {
+                newTodo = value;
+              },
+            ),
+            actions: <Widget>[
+              TextButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+              TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _todos.add(newTodo);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Add'))
+            ],
+          );
+        });
+  }
+
+  // add input to the todo list
   @override
   Widget build(BuildContext context) {
-    final items = [
-      'item1',
-      'item2',
-      'item3',
-      'item4',
-      'item5',
-      'item6',
-    ];
-    return MaterialApp(
-      title: "List View Builder",
-      home: Scaffold(
-        appBar: AppBar(title: Text("List View Builder")),
-        body: ListView.builder(
-          itemCount: items.length,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Todos Version 1'),
+      ),
+      body: ListView.builder(
+          itemCount: _todos.length,
           itemBuilder: (context, index) {
-            final item = items[index];
+            final todo = _todos[index];
             return ListTile(
-              title: Text(item),
-              subtitle: Text('subtitle'),
-              trailing: Icon(Icons.arrow_forward),
+              title: Text(todo),
               onTap: () {
-                print("you just clicked this item: $item");
+                setState(() {
+                  _todos.removeAt(index);
+                });
               },
             );
-          },
-        ),
+          }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addTodo,
+        child: Icon(Icons.add),
       ),
     );
   }
+  // create list view builder to show the list tiles
 }
