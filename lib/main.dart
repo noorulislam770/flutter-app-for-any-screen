@@ -7,76 +7,50 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Dialogue Demo",
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State {
-  String _inputText = '';
-
-  void _showInputDiaglog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          TextEditingController controller = TextEditingController();
-          return AlertDialog(
-            title: const Text("Enter Some Text"),
-            content: TextField(
-              controller: controller,
-              decoration:
-                  const InputDecoration(hintText: "enter some text here."),
+      title: "Example List View App",
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('ListView'),
+        ),
+        body: ListView(
+          children: [
+            ListTile(
+              // leading: Icon(Icons.person),
+              title: Text('Noor'),
+              // subtitle: Text('Noor@one.com'),
+              // trailing: Icon(Icons.arrow_forward),
+              // onTap: () => print('Noor"s tile was clicked'),
             ),
-            actions: <Widget>[
-              TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Cancel')),
-              TextButton(
-                  onPressed: () {
-                    setState(() {
-                      _inputText = controller.text;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("Save")),
-            ],
-          );
-        });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Appbar "),
-      ),
-      body: Center(
-          child: _inputText.isEmpty
-              ? const Text('Tap the icon to enter some text')
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Text("You Entered: $_inputText"),
-                    TextButton(
-                        onPressed: () {
-                          setState(() {
-                            _inputText = '';
-                          });
-                        },
-                        child: const Text("Clear"))
-                  ],
-                )),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showInputDiaglog,
-        child: const Icon(Icons.edit),
+            ListTile(
+              // leading: Icon(Icons.person),
+              title: Text('Mohsin'),
+              // subtitle: Text('mohsin@one.com'),
+              // trailing: Icon(Icons.arrow_forward),
+              // onTap: () => print('moses"s tile was clicked'),
+            ),
+            ListTile(
+              // leading: Icon(Icons.person),
+              title: Text('Adiba'),
+              // subtitle: Text('adiba@one.com'),
+              // trailing: Icon(Icons.arrow_forward),
+              // onTap: () => print('adi"s tile was clicked'),
+            ),
+            ListTile(
+              // leading: Icon(Icons.person),
+              title: Text('Farah'),
+              // subtitle: Text('farah@one.com'),
+              // trailing: Icon(Icons.arrow_forward),
+              // onTap: () => print('farahs tile was clicked'),
+            ),
+            ListTile(
+              // leading: Icon(Icons.person),
+              title: Text('Shahdab'),
+              // subtitle: Text('shahdab@one.com'),
+              // trailing: Icon(Icons.arrow_forward),
+              // onTap: () => print('shadabs tile was clicked'),
+            ),
+          ],
+        ),
       ),
     );
   }
