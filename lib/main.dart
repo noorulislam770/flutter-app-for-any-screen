@@ -1,80 +1,72 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'example',
-      home: MyCustomForm(),
+    const appTitle = 'Demo';
+
+    return MaterialApp(
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text(appTitle),
+        ),
+        body: MyCustomForm(),
+      ),
     );
   }
 }
 
 class MyCustomForm extends StatefulWidget {
-  const MyCustomForm({super.key});
+  const MyCustomForm({Key? key}) : super(key: key);
 
   @override
-  State<MyCustomForm> createState() => _MyCustomFormState();
+  MyCustomFormState createState() => MyCustomFormState();
 }
 
-class _MyCustomFormState extends State<MyCustomForm> {
-  final firstController = TextEditingController();
-  final secondController = TextEditingController();
+class MyCustomFormState extends State<MyCustomForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _textController = TextEditingController();
 
-  // Dispose the controller
   @override
   void dispose() {
-    firstController.dispose();
-    secondController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text('App example'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: firstController,
-              decoration: InputDecoration(labelText: 'Name'),
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _textController,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'please enter some text';
+              } else {
+                return null;
+              }
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('the text was: ${_textController.text}')));
+                }
+              },
+              child: Text('submit'),
             ),
-            TextField(
-              controller: secondController,
-              decoration: InputDecoration(labelText: 'email'),
-            )
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.text_fields),
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Column(
-                    children: [
-                      Text("first value : ${firstController.text}"),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text("second value : ${secondController.text}"),
-                    ],
-                  ),
-                );
-              });
-        },
-        tooltip: 'show the values',
+          )
+        ],
       ),
     );
   }
