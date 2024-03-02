@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -8,6 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      title: 'example',
       home: MyCustomForm(),
     );
   }
@@ -21,16 +22,14 @@ class MyCustomForm extends StatefulWidget {
 }
 
 class _MyCustomFormState extends State<MyCustomForm> {
-  late FocusNode myFocusNode;
+  final firstController = TextEditingController();
+  final secondController = TextEditingController();
 
-  @override
-  void initState() {
-    myFocusNode = FocusNode();
-  }
-
+  // Dispose the controller
   @override
   void dispose() {
-    myFocusNode.dispose();
+    firstController.dispose();
+    secondController.dispose();
     super.dispose();
   }
 
@@ -38,33 +37,44 @@ class _MyCustomFormState extends State<MyCustomForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My Form'),
+        centerTitle: true,
+        title: Text('App example'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16),
         child: Column(
           children: [
             TextField(
-              decoration: InputDecoration(hintText: 'Input One autofocus'),
-              autofocus: true,
+              controller: firstController,
+              decoration: InputDecoration(labelText: 'Name'),
             ),
             TextField(
-              decoration:
-                  InputDecoration(hintText: 'Input Two focus node connected'),
-              focusNode: myFocusNode,
-            ),
-            TextField(
-              decoration: InputDecoration(hintText: 'Input Three'),
-            ),
+              controller: secondController,
+              decoration: InputDecoration(labelText: 'email'),
+            )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.star),
-        tooltip: 'Click me for focusing on 2nd box',
+        child: Icon(Icons.text_fields),
         onPressed: () {
-          myFocusNode.requestFocus();
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Column(
+                    children: [
+                      Text("first value : ${firstController.text}"),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text("second value : ${secondController.text}"),
+                    ],
+                  ),
+                );
+              });
         },
+        tooltip: 'show the values',
       ),
     );
   }
